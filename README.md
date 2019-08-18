@@ -12,7 +12,7 @@ And a lot more...
 ## Watch The Complete Tutorial Here 
 
 ### [In English](https://youtu.be/yHrpx4PoBzU)
-### [In Hindi]()
+### [In Hindi](https://youtu.be/yHrpx4PoBzU)
 
 
 ### Star It And Play With The Code
