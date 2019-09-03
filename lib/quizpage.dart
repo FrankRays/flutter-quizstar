@@ -6,14 +6,41 @@ import 'package:quizstar/resultpage.dart';
 
 class getjson extends StatelessWidget {
 
-  
+  // accept the langname as a parameter
+
+  String langname;
+  getjson(this.langname);
+  String assettoload;
+
+  // a function
+  // sets the asset to a particular JSON file
+  // and opens the JSON
+  setasset() {
+    if (langname == "Python") {
+      assettoload = "assets/python.json";
+    }else if(langname == "Java") {
+      assettoload = "assets/java.json";
+    }else if(langname == "Javascript") {
+      assettoload = "assets/js.json";
+    }else if(langname == "C++") {
+      assettoload = "assets/cpp.json";
+    }else{
+      assettoload = "assets/linux.json";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // this function is called before the build so that
+    // the string assettoload is avialable to the DefaultAssetBuilder
+    setasset();
+    // and now we return the FutureBuilder to load and decode JSON
     return FutureBuilder(
-      future: DefaultAssetBundle.of(context).loadString("assets/python.json"),
-      builder: (context, snapshot){
+      future:
+          DefaultAssetBundle.of(context).loadString(assettoload, cache: true),
+      builder: (context, snapshot) {
         List mydata = json.decode(snapshot.data.toString());
-        if(mydata == null){
+        if (mydata == null) {
           return Scaffold(
             body: Center(
               child: Text(
@@ -21,8 +48,8 @@ class getjson extends StatelessWidget {
               ),
             ),
           );
-        }else{
-          return quizpage(mydata : mydata);
+        } else {
+          return quizpage(mydata: mydata);
         }
       },
     );
@@ -30,15 +57,15 @@ class getjson extends StatelessWidget {
 }
 
 class quizpage extends StatefulWidget {
- var mydata;
+  var mydata;
 
-  quizpage({Key key, @required this.mydata}) : super(key : key);
+  quizpage({Key key, @required this.mydata}) : super(key: key);
   @override
   _quizpageState createState() => _quizpageState(mydata);
 }
 
 class _quizpageState extends State<quizpage> {
-
+  
   var mydata;
   _quizpageState(this.mydata);
 
@@ -51,20 +78,22 @@ class _quizpageState extends State<quizpage> {
   String showtimer = "30";
 
   Map<String, Color> btncolor = {
-    "a" : Colors.indigoAccent,
-    "b" : Colors.indigoAccent,
-    "c" : Colors.indigoAccent,
-    "d" : Colors.indigoAccent,
+    "a": Colors.indigoAccent,
+    "b": Colors.indigoAccent,
+    "c": Colors.indigoAccent,
+    "d": Colors.indigoAccent,
   };
 
   bool canceltimer = false;
 
+  // overriding the initstate function to start timer as this screen is created
   @override
-  void initState(){
+  void initState() {
     starttimer();
     super.initState();
   }
 
+  // overriding the setstate function to be called only if mounted
   @override
   void setState(fn) {
     if (mounted) {
@@ -72,51 +101,60 @@ class _quizpageState extends State<quizpage> {
     }
   }
 
-
   void starttimer() async {
     const onesec = Duration(seconds: 1);
-    Timer.periodic(onesec, (Timer t){
+    Timer.periodic(onesec, (Timer t) {
       setState(() {
-        if(timer < 1){
+        if (timer < 1) {
           t.cancel();
           nextquestion();
-        }else if(canceltimer == true){
+        } else if (canceltimer == true) {
           t.cancel();
-        }else{
+        } else {
           timer = timer - 1;
         }
         showtimer = timer.toString();
-      }); 
+      });
     });
   }
 
-  void nextquestion(){
+  void nextquestion() {
     canceltimer = false;
     timer = 30;
     setState(() {
-     if(i < 10){
-      i++;
-    }else{
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => resultpage(marks : marks),
-      ));
-    } 
-    btncolor["a"] = Colors.indigoAccent;
-    btncolor["b"] = Colors.indigoAccent;
-    btncolor["c"] = Colors.indigoAccent;
-    btncolor["d"] = Colors.indigoAccent;
+      if (i < 10) {
+        i++;
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => resultpage(marks: marks),
+        ));
+      }
+      btncolor["a"] = Colors.indigoAccent;
+      btncolor["b"] = Colors.indigoAccent;
+      btncolor["c"] = Colors.indigoAccent;
+      btncolor["d"] = Colors.indigoAccent;
     });
     starttimer();
   }
 
-  void checkanswer(String k){
-    if(mydata[2]["1"] == mydata[1]["1"][k]){
+  void checkanswer(String k) {
+    // in the previous version this was
+    // mydata[2]["1"] == mydata[1]["1"][k]
+    // which i forgot to change
+    // so nake sure that this is now corrected
+    if (mydata[2][i.toString()] == mydata[1][i.toString()][k]) {
+      // just a print sattement to check the correct working
+      // debugPrint(mydata[2][i.toString()] + " is equal to " + mydata[1][i.toString()][k]);
       marks = marks + 5;
+      // changing the color variable to be green
       colortoshow = right;
-    }else{
+    } else {
+      // just a print sattement to check the correct working
+      // debugPrint(mydata[2]["1"] + " is equal to " + mydata[1]["1"][k]);
       colortoshow = wrong;
     }
     setState(() {
+      // applying the changed color to the particular button that was selected
       btncolor[k] = colortoshow;
       canceltimer = true;
     });
@@ -124,7 +162,7 @@ class _quizpageState extends State<quizpage> {
     Timer(Duration(seconds: 2), nextquestion);
   }
 
-  Widget choicebutton(String k){
+  Widget choicebutton(String k) {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 10.0,
@@ -146,90 +184,87 @@ class _quizpageState extends State<quizpage> {
         highlightColor: Colors.indigo[700],
         minWidth: 200.0,
         height: 45.0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown, DeviceOrientation.portraitUp
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         return showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(
-              "Quizstar",
-            ),
-            content: Text(
-              "You Can't Go Back At This Stage."
-            ),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Ok',
-                ),
-              )
-            ],
-          )
-        );
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text(
+                    "Quizstar",
+                  ),
+                  content: Text("You Can't Go Back At This Stage."),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Ok',
+                      ),
+                    )
+                  ],
+                ));
       },
       child: Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 3,
-            child: Container(
-              padding: EdgeInsets.all(15.0),
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                mydata[0][i.toString()],
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontFamily: "Quando",
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 6,
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  choicebutton('a'),
-                  choicebutton('b'),
-                  choicebutton('c'),
-                  choicebutton('d'),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: Center(
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Container(
+                padding: EdgeInsets.all(15.0),
+                alignment: Alignment.bottomLeft,
                 child: Text(
-                  showtimer,
+                  mydata[0][i.toString()],
                   style: TextStyle(
-                    fontSize: 35.0,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Times New Roman',
+                    fontSize: 16.0,
+                    fontFamily: "Quando",
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              flex: 6,
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    choicebutton('a'),
+                    choicebutton('b'),
+                    choicebutton('c'),
+                    choicebutton('d'),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                alignment: Alignment.topCenter,
+                child: Center(
+                  child: Text(
+                    showtimer,
+                    style: TextStyle(
+                      fontSize: 35.0,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Times New Roman',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 }
