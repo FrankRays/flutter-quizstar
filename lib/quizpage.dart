@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:quizstar/resultpage.dart';
 
 class getjson extends StatelessWidget {
-
   // accept the langname as a parameter
 
   String langname;
@@ -18,13 +17,13 @@ class getjson extends StatelessWidget {
   setasset() {
     if (langname == "Python") {
       assettoload = "assets/python.json";
-    }else if(langname == "Java") {
+    } else if (langname == "Java") {
       assettoload = "assets/java.json";
-    }else if(langname == "Javascript") {
+    } else if (langname == "Javascript") {
       assettoload = "assets/js.json";
-    }else if(langname == "C++") {
+    } else if (langname == "C++") {
       assettoload = "assets/cpp.json";
-    }else{
+    } else {
       assettoload = "assets/linux.json";
     }
   }
@@ -65,7 +64,6 @@ class quizpage extends StatefulWidget {
 }
 
 class _quizpageState extends State<quizpage> {
-  
   var mydata;
   _quizpageState(this.mydata);
 
@@ -74,6 +72,8 @@ class _quizpageState extends State<quizpage> {
   Color wrong = Colors.red;
   int marks = 0;
   int i = 1;
+  // extra varibale to iterate
+  int j = 1;
   int timer = 30;
   String showtimer = "30";
 
@@ -85,6 +85,10 @@ class _quizpageState extends State<quizpage> {
   };
 
   bool canceltimer = false;
+
+  // code inserted for choosing questions randomly
+  // to create the array elements randomly use the dart:math module
+  var random_array = [1, 6, 7, 2, 4, 10, 8, 3, 9, 5];
 
   // overriding the initstate function to start timer as this screen is created
   @override
@@ -122,8 +126,9 @@ class _quizpageState extends State<quizpage> {
     canceltimer = false;
     timer = 30;
     setState(() {
-      if (i < 10) {
-        i++;
+      if (j < 10) {
+        i = random_array[j];
+        j++;
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => resultpage(marks: marks),
@@ -159,7 +164,8 @@ class _quizpageState extends State<quizpage> {
       canceltimer = true;
     });
 
-    Timer(Duration(seconds: 2), nextquestion);
+    // changed timer duration to 1 second
+    Timer(Duration(seconds: 1), nextquestion);
   }
 
   Widget choicebutton(String k) {
