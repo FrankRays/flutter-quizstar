@@ -34,26 +34,38 @@ And a lot more...
 
   1. Updated Code To Pick Questions Randomly
   ```dart
-    // extra varibale to iterate
+    // extra variable to iterate
     int j = 1;
-    // to create the array elements randomly use the dart:math module
-    // ----------
-    // var rand = new Random();
-    // for (var i = 0; i < 10; i++) {
-    // print(rand.nextInt(100));
-    // }
-    // ----------
+    // to create the array elements randomly use the dart:math Module
+    // --- CODE ---
+    // ----- USE THIS IS CODE IF YOU WANT TO GENERATE ARRAY RANDOMLY -----
+
+      // import 'dart:math';
+      //   var random_array;
+      //   var distinctIds = [];
+      //   var rand = new Random();
+      //     for (int i = 0; ;) {
+      //     distinctIds.add(rand.nextInt(10));
+      //       random_array = distinctIds.toSet().toList();
+      //       if(random_array.length < 10){
+      //         continue;
+      //       }else{
+      //         break;
+      //       }
+      //     }
+      //   print(random_array);
+
     var random_array = [1, 6, 7, 2, 4, 10, 8, 3, 9, 5];
   ```
   2. Changed Button Click Timer To 1 Second ( 2 sec Earlier )
   ```dart
       Timer(Duration(seconds: 1), nextquestion);
   ```
-  3. many Asked How To Increase And Decrease timer Timer ! Just Change The Timer Variable 
+  3. Many Asked How To Increase And Decrease timer Timer ! Just Change The Timer Variable's Value 
   ```dart
       int timer = 30;
   ```
 
-## **Changelog/Commit 02**
+## **Changelog/Commit 03**
 
   *Coming SOON*

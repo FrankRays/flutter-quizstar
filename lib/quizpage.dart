@@ -88,6 +88,25 @@ class _quizpageState extends State<quizpage> {
 
   // code inserted for choosing questions randomly
   // to create the array elements randomly use the dart:math module
+  // -----     CODE TO GENERATE ARRAY RANDOMLY
+
+  // import 'dart:math';
+
+  //   var random_array;
+  //   var distinctIds = [];
+  //   var rand = new Random();
+  //     for (int i = 0; ;) {
+  //     distinctIds.add(rand.nextInt(10));
+  //       random_array = distinctIds.toSet().toList();
+  //       if(random_array.length < 10){
+  //         continue;
+  //       }else{
+  //         break;
+  //       }
+  //     }
+  //   print(random_array);
+
+  // ----- END OF CODE
   var random_array = [1, 6, 7, 2, 4, 10, 8, 3, 9, 5];
 
   // overriding the initstate function to start timer as this screen is created
